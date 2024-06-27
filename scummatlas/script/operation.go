@@ -2,6 +2,7 @@ package script
 
 import (
 	"fmt"
+	"html/template"
 	"strconv"
 	"strings"
 )
@@ -83,6 +84,44 @@ func (script Script) Debug() string {
 func (script Script) Print() string {
 	var out string
 	var indent int
+	condUntil := make([]int, 0)
+	for i, op := range script {
+		script[i].indent = indent
+		if op.callMethod == "ifClassOfIs" || op.opType == OpConditional {
+			if op.offset < op.condDst {
+				condUntil = append(condUntil, op.condDst)
+				indent++
+			}
+		}
+		for indent > 0 && condUntil[indent-1] == op.offset+op.length {
+			condUntil = condUntil[0 : indent-1]
+			indent--
+		}
+	}
+	prevIndent := 0
+	for i, op := range script {
+		if op.indent > prevIndent {
+			out += " {"
+		}
+		if op.indent < prevIndent {
+			out += "\n" + strings.Repeat("  ", op.indent) + "}"
+		}
+		prevIndent = op.indent
+		if i > 0 {
+			out += "\n"
+		}
+		out += strings.Repeat("  ", op.indent) + op.String()
+	}
+	for prevIndent > 0 {
+		out += "\n" + strings.Repeat("  ", prevIndent) + "}"
+		prevIndent--
+	}
+	return out
+}
+
+func (script Script) ToHtml(scriptIdx int) template.HTML {
+	var out string
+	var indent int
 	lineNoPadding := len(strconv.Itoa(script[len(script)-1].offset))
 	condUntil := make([]int, 0)
 	for i, op := range script {
@@ -110,13 +149,13 @@ func (script Script) Print() string {
 		if i > 0 {
 			out += "\n"
 		}
-		out += fmt.Sprintf("%0*v: ", lineNoPadding, op.offset) + strings.Repeat("  ", op.indent) + op.String()
+		out += fmt.Sprintf("<span class=\"offsetjump\" id=\"script%v_%v\">%0*v</span>: ", scriptIdx, op.offset, lineNoPadding, op.offset) + strings.Repeat("  ", op.indent) + op.ToHtml(scriptIdx)
 	}
 	for prevIndent > 0 {
 		out += "\n" + strings.Repeat("  ", prevIndent) + fmt.Sprintf("  %v}", strings.Repeat(" ", lineNoPadding))
 		prevIndent--
 	}
-	return out
+	return template.HTML(out)
 }
 
 func (op *Operation) addNamedStringParam(paramName string, value string) {
@@ -153,6 +192,45 @@ func (op Operation) Debug() string {
 		callResult := ""
 		if op.callResult != "" {
 			callResult += fmt.Sprintf("%v = ", op.callResult)
+		}
+		return fmt.Sprintf("%v%v(%v)", callResult, op.callMethod, params)
+	} else if op.opType == OpAssignment {
+		return fmt.Sprintf("%v = %v", op.assignDst, op.assignVal)
+	} else if op.opType == OpConditional {
+		return fmt.Sprintf("unless (%v %v %v) goto %04x", op.condOp1, condOpSymbols[op.condOp], op.condOp2, op.condDst)
+	} else if op.opType == OpError {
+		return fmt.Sprintf("%v", op.errorMsg)
+	}
+	return ""
+}
+
+func (op Operation) ToHtml(scriptIdx int) string {
+	// TODO(wso): There's an OpConditional check below too
+	if op.opType == OpConditional {
+		return fmt.Sprintf("if (%v %v %v)", op.condOp1, condOpSymbols[op.condOp], op.condOp2)
+	}
+
+	if op.opType == OpCall {
+		params := ""
+		for _, param := range op.callParams {
+			if params != "" {
+				params += ", "
+			}
+			params += param
+		}
+		for paramName := range op.callMap {
+			if params != "" {
+				params += ", "
+			}
+			params += paramName + "=" + op.callMap[paramName]
+		}
+		callResult := ""
+		if op.callResult != "" {
+			callResult += fmt.Sprintf("%v = ", op.callResult)
+		}
+		if op.callMethod == "goto" {
+			gotoLink := fmt.Sprintf("<a href=\"#script%v_%v\">%v</a>", scriptIdx, params, params)
+			return fmt.Sprintf("%v%v(%v)", callResult, op.callMethod, gotoLink)
 		}
 		return fmt.Sprintf("%v%v(%v)", callResult, op.callMethod, params)
 	} else if op.opType == OpAssignment {

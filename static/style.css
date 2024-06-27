@@ -73,3 +73,15 @@ img.zplane {
 .room-inline-list__item:last-child:after {
     content: '';
 }
+
+.offsetjump::before {
+    content: '';
+    display: block;
+    height:      64px;
+    margin-top: -64px;
+    visibility: hidden;
+  }
+
+.local_scripts {
+    overflow: visible;
+}

@@ -62,7 +62,7 @@ func (self Object) CalledScripts() []int {
 }
 
 func (self Verb) PrintScript() string {
-	return self.Script.Print()
+	return self.Script.Debug()
 }
 
 func (self ObjectImage) FramesIndexes() (out []string) {

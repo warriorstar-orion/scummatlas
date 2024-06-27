@@ -130,7 +130,7 @@
             <h3>Local scripts</h3>
             {{range $index, $element := .LocalScripts}}
             <h4>Script #{{printf "%d" $index}}</h4>
-            <pre>{{$element.Print}}</pre>
+            <pre class="local_scripts">{{$element.ToHtml $index}}</pre>
             {{end}}
         </div>
 
