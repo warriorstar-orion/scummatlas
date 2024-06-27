@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-//Operation types
+// Operation types
 const (
 	_ = iota
 	OpCall
@@ -83,6 +83,7 @@ func (script Script) Debug() string {
 func (script Script) Print() string {
 	var out string
 	var indent int
+	lineNoPadding := len(strconv.Itoa(script[len(script)-1].offset))
 	condUntil := make([]int, 0)
 	for i, op := range script {
 		script[i].indent = indent
@@ -103,16 +104,16 @@ func (script Script) Print() string {
 			out += " {"
 		}
 		if op.indent < prevIndent {
-			out += "\n" + strings.Repeat("  ", op.indent) + "}"
+			out += "\n" + strings.Repeat("  ", op.indent) + fmt.Sprintf("  %v}", strings.Repeat(" ", lineNoPadding))
 		}
 		prevIndent = op.indent
 		if i > 0 {
 			out += "\n"
 		}
-		out += strings.Repeat("  ", op.indent) + op.String()
+		out += fmt.Sprintf("%0*v: ", lineNoPadding, op.offset) + strings.Repeat("  ", op.indent) + op.String()
 	}
 	for prevIndent > 0 {
-		out += "\n" + strings.Repeat("  ", prevIndent) + "}"
+		out += "\n" + strings.Repeat("  ", prevIndent) + fmt.Sprintf("  %v}", strings.Repeat(" ", lineNoPadding))
 		prevIndent--
 	}
 	return out
