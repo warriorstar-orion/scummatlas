@@ -236,7 +236,8 @@ func (op Operation) ToHtml(scriptIdx int) string {
 	} else if op.opType == OpAssignment {
 		return fmt.Sprintf("%v = %v", op.assignDst, op.assignVal)
 	} else if op.opType == OpConditional {
-		return fmt.Sprintf("unless (%v %v %v) goto %04x", op.condOp1, condOpSymbols[op.condOp], op.condOp2, op.condDst)
+		gotoLink := fmt.Sprintf("<a href=\"#script%v_%v\">%v</a>", scriptIdx, op.condDst, op.condDst)
+		return fmt.Sprintf("unless (%v %v %v) goto %v", op.condOp1, condOpSymbols[op.condOp], op.condOp2, gotoLink)
 	} else if op.opType == OpError {
 		return fmt.Sprintf("%v", op.errorMsg)
 	}

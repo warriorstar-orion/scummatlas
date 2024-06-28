@@ -315,6 +315,13 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		case 0x05:
 			op.addNamedParam("stringId", getByte())
 			op.addNamedParam("size", getByte())
+		case 0x81:
+			op.opType = OpCall
+			op.callMethod += "assignString"
+			op.addParam(fmt.Sprintf("%v", getWord()))
+			say, length := parseString(p.data, p.offset+opCodeLength)
+			op.addParam(fmt.Sprintf("\"%v\"", say))
+			opCodeLength += length
 		default:
 			return Operation{}, errors.New(
 				fmt.Sprintf(
