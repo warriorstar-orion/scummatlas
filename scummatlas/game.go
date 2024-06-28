@@ -22,13 +22,13 @@ type GameMetaData struct {
 }
 
 var GamesHashes = map[string]GameMetaData{
-	"2d1e891fe52df707c30185e52c50cd92": GameMetaData{5, "The Secret of Monkey Island", "CD", "en"},
-	"c0c9de81fb965e6cbe77f6e5631ca705": GameMetaData{5, "The Secret of Monkey Island", "Talkie", "en"},
-	"3686cf8f89e102ececf4366e1d2c8126": GameMetaData{5, "Monkey Island: Lechuck's Revenge", "Floppy", "en"},
-	"182344899c2e2998fca0bebcd82aa81a": GameMetaData{5, "Indiana Jones and the Fate of Atlantis", "CD", "en"},
-	"4167a92a1d46baa4f4127d918d561f88": GameMetaData{6, "The Day of the Tentacle", "CD", "en"},
-	"d917f311a448e3cc7239c31bddb00dd2": GameMetaData{6, "Sam & Max Hit the Road", "CD", "en"},
-	"d8323015ecb8b10bf53474f6e6b0ae33": GameMetaData{7, "The Dig", "CD", "en"},
+	"2d1e891fe52df707c30185e52c50cd92": {5, "The Secret of Monkey Island", "CD", "en"},
+	"c0c9de81fb965e6cbe77f6e5631ca705": {5, "The Secret of Monkey Island", "Talkie", "en"},
+	"3686cf8f89e102ececf4366e1d2c8126": {5, "Monkey Island: Lechuck's Revenge", "Floppy", "en"},
+	"182344899c2e2998fca0bebcd82aa81a": {5, "Indiana Jones and the Fate of Atlantis", "CD", "en"},
+	"4167a92a1d46baa4f4127d918d561f88": {6, "The Day of the Tentacle", "CD", "en"},
+	"d917f311a448e3cc7239c31bddb00dd2": {6, "Sam & Max Hit the Road", "CD", "en"},
+	"d8323015ecb8b10bf53474f6e6b0ae33": {7, "The Dig", "CD", "en"},
 }
 
 type Game struct {
@@ -155,7 +155,7 @@ func (self *Game) processMainFile() {
 	self.Scripts = self.mainData.GetScripts()
 	self.Costumes = self.mainData.GetCostumes()
 
-	l.Log("structure", "Room count", len(self.RoomOffsets))
+	l.Log("structure", "Room count %v", len(self.RoomOffsets))
 }
 
 func (self Game) dumpFile(file string, outputdir string) error {
@@ -190,7 +190,7 @@ func (self *Game) processIndex() error {
 		currBlock := data[currIndex : currIndex+blockSize]
 
 		currIndex += blockSize
-		l.Log("structure", "Parse Block", blockName)
+		l.Log("structure", "Parse Block %v", blockName)
 		switch blockName {
 		case "RNAM":
 			self.RoomNames = ParseRoomNames(currBlock)

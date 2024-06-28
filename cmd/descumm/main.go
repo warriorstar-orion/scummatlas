@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 
 	if infile == "REQUIRED" {
-		fmt.Println("missing compulsory parameter\n")
+		fmt.Println("missing compulsory parameter")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}

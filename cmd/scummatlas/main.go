@@ -104,7 +104,7 @@ func loadOptions() {
 	flag.Parse()
 
 	if outputdir == REQUIRED || gamedir == REQUIRED {
-		fmt.Println("outputdir and gamedir are not optional\n")
+		fmt.Println("outputdir and gamedir are not optional")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}

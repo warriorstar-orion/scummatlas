@@ -307,7 +307,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		case 0x02, 0x03:
 			op.addNamedParam("stringId", getByte())
 			op.addNamedParam("index", getByte())
-			op.addNamedStringParam("char", string(getByte()))
+			op.addNamedStringParam("char", fmt.Sprintf("%x", getByte()))
 		case 0x04:
 			op.assignDst = varName(getWord())
 			op.addNamedParam("stringId", getByte())
