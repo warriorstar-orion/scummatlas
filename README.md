@@ -6,6 +6,19 @@ This is Warriorstar's fork of the [ScummAtlas][] project by Miguel Gonzalez (ktz
 
 ## Installation
 
+Simply download the latest release binary, `scummatlas.exe`. Put it somewhere
+near your SCUMM games.
+
+Once downloaded, open up a terminal/command line, and run it as follows (using
+_Indiana Jones and the Fate of Atlantis_ as an example directory):
+
+`scummatlas.exe -gamedir "D:/Path/To/Games/ATLANTIS" -outputdir "out/" -serve`
+
+This will generate all of the files for the webpage, as well as start a local
+web server so you can access them easily. Press Ctrl-C to stop the web server.
+
+## Building
+
 This fork has been migrated to a Go module.
 
 ```bash

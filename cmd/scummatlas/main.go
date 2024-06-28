@@ -6,6 +6,8 @@ import (
 	"image"
 	"image/png"
 	"io/ioutil"
+	"log"
+	"net/http"
 	"os"
 	"scummatlas/scummatlas"
 	"scummatlas/scummatlas/blocks"
@@ -24,6 +26,7 @@ var singleRoom int
 var noimages bool
 var multicpu bool
 var dumpdecoded bool
+var serve bool
 
 func main() {
 	loadOptions()
@@ -85,6 +88,19 @@ func main() {
 		}
 		fmt.Printf("Files for costume %d generated\n", costumeId)
 	}
+
+	if serve {
+		fs := http.FileServer(http.Dir(outputdir))
+		http.Handle("/", fs)
+
+		fmt.Printf("Web server started at http://127.0.0.1:3000/")
+		fmt.Printf("Access this URL in your browser to view the generated output.")
+		fmt.Printf("Press Ctrl-C to stop the web server.")
+		err := http.ListenAndServe(":3000", nil)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 }
 
 func loadOptions() {
@@ -100,6 +116,7 @@ func loadOptions() {
 	flag.BoolVar(&noimages, "noimages", false, "Don't create images")
 	flag.BoolVar(&multicpu, "multicpu", false, "Use multiple processes")
 	flag.BoolVar(&dumpdecoded, "dumpdecoded", false, "Dump decoded .000 and .001")
+	flag.BoolVar(&serve, "serve", false, "Start static web server after generating pages")
 	flag.StringVar(&logflags, "logflags", "", "Comma separated list of log flags. Available flags: "+strings.Join(logkeys, ", "))
 	flag.Parse()
 
