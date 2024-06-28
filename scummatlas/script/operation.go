@@ -3,6 +3,7 @@ package script
 import (
 	"fmt"
 	"html/template"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -183,7 +184,12 @@ func (op Operation) Debug() string {
 			}
 			params += param
 		}
-		for paramName := range op.callMap {
+		sortedNames := make([]string, 0, len(op.callMap))
+		for name := range op.callMap {
+			sortedNames = append(sortedNames, name)
+		}
+		slices.Sort(sortedNames)
+		for _, paramName := range sortedNames {
 			if params != "" {
 				params += ", "
 			}
@@ -218,7 +224,12 @@ func (op Operation) ToHtml(scriptIdx int) string {
 			}
 			params += param
 		}
-		for paramName := range op.callMap {
+		sortedNames := make([]string, 0, len(op.callMap))
+		for name := range op.callMap {
+			sortedNames = append(sortedNames, name)
+		}
+		slices.Sort(sortedNames)
+		for _, paramName := range sortedNames {
 			if params != "" {
 				params += ", "
 			}
