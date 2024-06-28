@@ -1,23 +1,26 @@
-# ScummAtlas
+# WSO - ScummAtlas
 
-## How to run this
-I know the project doesn't follow the standard Golang structure. It's on the todo list :)
+This is Warriorstar's fork of the [ScummAtlas][] project by Miguel Gonzalez (ktzar).
+
+[ScummAtlas]: https://github.com/ktzar/scummatlas
+
+## Installation
+
+This fork has been migrated to a Go module.
+
 ```bash
-git clone git@github.com:ktzar/scummatlas.git
+git clone git@github.com:warriorstar-orion/scummatlas.git
 cd scummatlas
-export GOPATH=`pwd`
-go run src/scummatlas/main/scummatlas.go -gamedir=/path/to/games/monkey2 -outputdir out
+go run cmd/scummatlas/main.go -gamedir "D:/Path/To/Games/ATLANTIS/" -outputdir "out/" 
 ```
 
-<img src="https://api.travis-ci.org/ktzar/scummatlas.svg?branch=master"/>
+## Original README
 
 Scumm games parser and HTML Atlas generator written in Golang.
 
 The aim of this software is to provide an easy to understand, testable, and organised software that unpacks games using the SCUMM engine.
 
 It creates a bunch of HTML files that software that aim to show the inner aspects of how these beloved games were implemented.
-
-Build status: https://travis-ci.org/ktzar/scummatlas
 
 TODO
 - Improve parsing local and object scripts
