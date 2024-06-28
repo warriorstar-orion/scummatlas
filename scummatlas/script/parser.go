@@ -189,7 +189,6 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 			op.addNamedParam("x", getWord())
 			op.addNamedParam("y", getWord())
 		case 0x02:
-			opCodeLength = 6
 			action = "setState"
 			op.addNamedParam("state", getWord())
 		case 0xff:
@@ -279,7 +278,9 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		if result&0x2000 > 0 {
 			opCodeLength += 2
 		}
-		if result&0x4000 > 0 {
+		if result&0x8000 > 0 {
+			op.assignDst = varName(result - 0x8000)
+		} else if result&0x4000 > 0 {
 			op.assignDst = fmt.Sprintf("local[%d]", result-0x4000)
 		} else {
 			op.assignDst = fmt.Sprintf("var[%d]", result)
