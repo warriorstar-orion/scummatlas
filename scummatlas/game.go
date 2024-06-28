@@ -75,9 +75,9 @@ func NewGame(gamedir string) *Game {
 	}
 
 	game.processIndex()
-	fmt.Println("Costume\tRoom\tOffset")
+	l.Log("costume", "Costume\tRoom\tOffset")
 	for i, c := range game.CostumeIndex {
-		fmt.Printf("%v\t%v\t%v\n", i, c.RoomNumber, c.Offset)
+		l.Log("costume", fmt.Sprintf("%v\t%v\t%v\n", i, c.RoomNumber, c.Offset))
 	}
 	game.processMainFile()
 	return &game

@@ -5,6 +5,7 @@ import (
 	"image"
 	"image/color"
 	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
 	i "scummatlas/scummatlas/image"
 )
 
@@ -41,7 +42,7 @@ func DecodeLimb(data []byte, offset int, palette color.Palette) (limb Limb, leng
 	limb.MoveY = b.LE16(data, offset+10)
 
 	if limb.Width > 300 || limb.Height > 300 {
-		fmt.Println("Image too big")
+		l.Log("costume", "Image too big")
 		return
 	}
 	limb.Image, length = i.ParseLimb(
@@ -194,12 +195,12 @@ func NewCostume(data []byte, roomPalette color.Palette) *Costume {
 		limbOffset := c.frameOffsets[0] + picNumber*2
 		c.AddSection(limbOffset, 2, "LimbOffset", fmt.Sprintf("%d", picNumber))
 		if limbOffset > len(data) {
-			fmt.Printf("Something wrong with limb %d\n", picNumber)
+			l.Log("costume", "Something wrong with limb %d\n", picNumber)
 			continue
 		}
 		imgOffset := b.LE16(data, limbOffset) - 6
 		if imgOffset+18 > len(data) || imgOffset < 0 {
-			fmt.Printf("Something wrong with limb image %d\n", picNumber)
+			l.Log("costume", "Something wrong with limb image %d\n", picNumber)
 			continue
 		}
 		c.AddSection(imgOffset, 2, "Pict", "Width")

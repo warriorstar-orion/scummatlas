@@ -12,6 +12,7 @@ var Flags = map[string]bool{
 	"structure": false,
 	"object":    false,
 	"template":  false,
+	"costume":   false,
 }
 
 func Log(section string, format string, v ...interface{}) {
