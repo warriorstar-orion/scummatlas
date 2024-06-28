@@ -1,9 +1,11 @@
 package templates
 
-import "html/template"
-import "scummatlas/blocks"
-import "os"
-import "fmt"
+import (
+	"fmt"
+	"html/template"
+	"os"
+	"scummatlas/scummatlas/blocks"
+)
 
 type HexCol struct {
 	Value byte

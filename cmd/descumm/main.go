@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	b "scummatlas/binaryutils"
-	s "scummatlas/script"
+	b "scummatlas/scummatlas/binaryutils"
+	s "scummatlas/scummatlas/script"
 )
 
 func main() {

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"html/template"
 	"os"
-	"scummatlas"
-	l "scummatlas/condlog"
-	s "scummatlas/script"
+	"scummatlas/scummatlas"
+	l "scummatlas/scummatlas/condlog"
+	s "scummatlas/scummatlas/script"
 )
 
 type scriptData struct {

@@ -7,11 +7,11 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	b "scummatlas/scummatlas/binaryutils"
+	"scummatlas/scummatlas/blocks"
+	l "scummatlas/scummatlas/condlog"
+	s "scummatlas/scummatlas/script"
 	"scummatlas/utils"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
-	s "scummatlas/script"
-	"scummatlas/blocks"
 )
 
 type GameMetaData struct {
@@ -32,17 +32,17 @@ var GamesHashes = map[string]GameMetaData{
 }
 
 type Game struct {
-	RoomOffsets []RoomOffset
+	RoomOffsets  []RoomOffset
 	CostumeIndex []IndexItem
-	RoomNames   []RoomName
-	RoomIndexes []int
-	Rooms       []blocks.Room
-	Scripts     []s.Script
-	Costumes    []blocks.Costume
-	gamedir     string
-	indexFile   string
-	mainFile    string
-	mainData    *MainScummData
+	RoomNames    []RoomName
+	RoomIndexes  []int
+	Rooms        []blocks.Room
+	Scripts      []s.Script
+	Costumes     []blocks.Costume
+	gamedir      string
+	indexFile    string
+	mainFile     string
+	mainData     *MainScummData
 	GameMetaData
 }
 
@@ -76,7 +76,7 @@ func NewGame(gamedir string) *Game {
 
 	game.processIndex()
 	fmt.Println("Costume\tRoom\tOffset")
-	for i, c := range(game.CostumeIndex) {
+	for i, c := range game.CostumeIndex {
 		fmt.Printf("%v\t%v\t%v\n", i, c.RoomNumber, c.Offset)
 	}
 	game.processMainFile()

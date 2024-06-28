@@ -3,14 +3,14 @@ package image
 import (
 	"image"
 	"image/color"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
+	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
 )
 
 func ParseLimb(data []byte, width int, height int, palette color.Palette) (i *image.Paletted, length int) {
 	shift := uint8(4)
 	mask := byte(0xf)
-	if (len(palette) > 16) {
+	if len(palette) > 16 {
 		shift = uint8(3)
 		mask = byte(0x7)
 	}
@@ -19,33 +19,33 @@ func ParseLimb(data []byte, width int, height int, palette color.Palette) (i *im
 	pixelCount := 0
 	pixelLimit := width * height
 
-	drawNColours := func (repetition int, colour byte) {
-		if int(colour) > len(palette) -1 {
+	drawNColours := func(repetition int, colour byte) {
+		if int(colour) > len(palette)-1 {
 			return
 		}
-		for i := 0 ; i < repetition ; i ++ {
+		for i := 0; i < repetition; i++ {
 			im.SetColorIndex(
 				pixelCount/height,
 				pixelCount%height,
 				colour,
 			)
-			pixelCount ++
+			pixelCount++
 		}
 	}
 
 	for pixelCount < pixelLimit {
-		if cursor + 1 > len(data) {
+		if cursor+1 > len(data) {
 			break
 		}
 		read := data[cursor]
 		color := read >> shift
 		repetition := int(read & mask)
 		if repetition == 0 {
-			cursor ++
+			cursor++
 			repetition = int(data[cursor])
 		}
-		cursor ++
-		if repetition + pixelCount > pixelLimit {
+		cursor++
+		if repetition+pixelCount > pixelLimit {
 			break
 		}
 		drawNColours(repetition, color)

@@ -5,10 +5,10 @@ import (
 	"image"
 	"image/color"
 	"os"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
-	i "scummatlas/image"
-	s "scummatlas/script"
+	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
+	i "scummatlas/scummatlas/image"
+	s "scummatlas/scummatlas/script"
 	"strings"
 )
 
@@ -70,7 +70,7 @@ func (r Room) PaletteHex() []string {
 	hexes := make([]string, len(r.Palette))
 	for i, c := range r.Palette {
 		r, g, b, _ := c.RGBA()
-		hexes[i] = fmt.Sprintf("%02x%02x%02x", r & 0x00ff, g & 0xff, b & 0xff)
+		hexes[i] = fmt.Sprintf("%02x%02x%02x", r&0x00ff, g&0xff, b&0xff)
 	}
 	return hexes
 }

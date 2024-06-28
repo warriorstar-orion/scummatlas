@@ -3,10 +3,10 @@ package blocks
 import (
 	"fmt"
 	goimage "image"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
-	"scummatlas/image"
-	s "scummatlas/script"
+	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
+	"scummatlas/scummatlas/image"
+	s "scummatlas/scummatlas/script"
 	"strings"
 )
 

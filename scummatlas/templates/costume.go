@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"html/template"
 	"os"
-	"scummatlas/blocks"
-	l "scummatlas/condlog"
+	"scummatlas/scummatlas/blocks"
+	l "scummatlas/scummatlas/condlog"
 )
 
 type costumeData struct {
 	CostumeIndex int
-	Title string
+	Title        string
 	blocks.Costume
 }
 

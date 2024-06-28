@@ -1,7 +1,7 @@
 package blocks
 
 import (
-	b "scummatlas/binaryutils"
+	b "scummatlas/scummatlas/binaryutils"
 )
 
 type Box struct {

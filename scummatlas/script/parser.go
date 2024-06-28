@@ -3,8 +3,8 @@ package script
 import (
 	"errors"
 	"fmt"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
+	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
 	"strings"
 )
 

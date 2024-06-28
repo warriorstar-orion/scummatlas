@@ -1,8 +1,10 @@
 package script
 
-import "fmt"
-import b "scummatlas/binaryutils"
-import l "scummatlas/condlog"
+import (
+	"fmt"
+	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
+)
 
 func parsePrintOpcode(data []byte, offset int) (actions []string, opCodeLength int) {
 	originalOffset := offset

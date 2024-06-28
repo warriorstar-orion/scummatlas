@@ -2,10 +2,10 @@ package scummatlas
 
 import (
 	"fmt"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
-	s "scummatlas/script"
-	"scummatlas/blocks"
+	b "scummatlas/scummatlas/binaryutils"
+	"scummatlas/scummatlas/blocks"
+	l "scummatlas/scummatlas/condlog"
+	s "scummatlas/scummatlas/script"
 )
 
 type MainScummData struct {

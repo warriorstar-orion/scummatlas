@@ -3,15 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
-	"image/png"
 	"image"
+	"image/png"
 	"io/ioutil"
 	"os"
-	"scummatlas"
+	"scummatlas/scummatlas"
+	"scummatlas/scummatlas/blocks"
+	l "scummatlas/scummatlas/condlog"
+	"scummatlas/scummatlas/templates"
 	"scummatlas/utils"
-	"scummatlas/blocks"
-	l "scummatlas/condlog"
-	"scummatlas/templates"
 	"strings"
 	"sync"
 )
@@ -134,7 +134,7 @@ func copyStaticFiles() {
 
 func writeCostumeLimb(costume int, limb int, img *image.Paletted, outputdir string) {
 	fileName := fmt.Sprintf("%v/img_cost/%v_%v.png", outputdir, costume, limb)
-	pngFile, err := os.Create(fileName);
+	pngFile, err := os.Create(fileName)
 	if err != nil {
 		panic("Error creating " + fileName + ".png")
 	}

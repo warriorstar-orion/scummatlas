@@ -2,8 +2,8 @@ package scummatlas
 
 import (
 	"fmt"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
+	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
 )
 
 type IndexFile struct {
@@ -23,7 +23,7 @@ type RoomName struct {
 
 type IndexItem struct {
 	RoomNumber int
-	Offset int
+	Offset     int
 }
 
 type RoomIndex IndexItem

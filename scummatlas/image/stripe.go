@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"image"
 	"image/color"
-	b "scummatlas/binaryutils"
-	l "scummatlas/condlog"
+	b "scummatlas/scummatlas/binaryutils"
+	l "scummatlas/scummatlas/condlog"
 )
 
 const (

@@ -3,9 +3,9 @@ package templates
 import (
 	"html/template"
 	"os"
-	"scummatlas"
-	"scummatlas/blocks"
-	l "scummatlas/condlog"
+	"scummatlas/scummatlas"
+	"scummatlas/scummatlas/blocks"
+	l "scummatlas/scummatlas/condlog"
 )
 
 type indexData struct {
@@ -25,7 +25,7 @@ type mapData struct {
 }
 
 type CostumeIndex struct {
-	Title   string
+	Title    string
 	Costumes []blocks.Costume
 }
 
@@ -76,7 +76,6 @@ func WriteGameFiles(game scummatlas.Game, outdir string) {
 	writeScripts(game, outdir)
 	writeCostumes(game, outdir)
 }
-
 
 func writeCostumes(game scummatlas.Game, outdir string) {
 	filename := outdir + "/costumes.html"

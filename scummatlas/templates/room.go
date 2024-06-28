@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"html/template"
 	"os"
-	"scummatlas/blocks"
-	l "scummatlas/condlog"
+	"scummatlas/scummatlas/blocks"
+	l "scummatlas/scummatlas/condlog"
 	"strings"
 )
 

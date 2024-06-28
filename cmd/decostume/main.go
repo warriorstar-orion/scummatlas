@@ -4,13 +4,13 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"image/png"
 	"image/color/palette"
+	"image/png"
+	"io/ioutil"
 	"os"
-	"scummatlas/blocks"
-	b "scummatlas/binaryutils"
-	"scummatlas/templates"
+	b "scummatlas/scummatlas/binaryutils"
+	"scummatlas/scummatlas/blocks"
+	"scummatlas/scummatlas/templates"
 )
 
 func main() {
@@ -38,7 +38,7 @@ func main() {
 	}
 	for i, limb := range costume.Limbs {
 		fileName := fmt.Sprintf("limb_%v.png", i)
-		pngFile, err := os.Create(fileName);
+		pngFile, err := os.Create(fileName)
 		if err != nil {
 			panic("Error creating " + fileName + ".png")
 		}
