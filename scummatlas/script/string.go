@@ -4,6 +4,7 @@ import (
 	"fmt"
 	b "scummatlas/scummatlas/binaryutils"
 	l "scummatlas/scummatlas/condlog"
+	"strings"
 )
 
 func parsePrintOpcode(data []byte, offset int) (actions []string, opCodeLength int) {
@@ -70,7 +71,7 @@ func parseString(data []byte, offset int) (say string, length int) {
 				case 0x02:
 					say += "\\keep "
 				case 0x03:
-					say += "\\wait "
+					say += " [pause] "
 				}
 			case 0x04 <= escapeChar && escapeChar <= 0x0e:
 				val := b.LE16(data, offset+3)
@@ -99,5 +100,5 @@ func parseString(data []byte, offset int) (say string, length int) {
 			panic("Invalid character in print")
 		}
 	}
-	return say, offset - originalOffset
+	return strings.ReplaceAll(say, "^", "..."), offset - originalOffset
 }
