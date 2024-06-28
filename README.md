@@ -1,4 +1,4 @@
-# WSO - ScummAtlas
+# ScummAtlas-WSO
 
 This is Warriorstar's fork of the [ScummAtlas][] project by Miguel Gonzalez (ktzar).
 
@@ -26,6 +26,16 @@ git clone git@github.com:warriorstar-orion/scummatlas.git
 cd scummatlas
 go run cmd/scummatlas/main.go -gamedir "D:/Path/To/Games/ATLANTIS/" -outputdir "out/" 
 ```
+
+## WSO TODOs
+
+- [ ] Try and use scummex heuristics for better if-branches
+- [ ] Allow annotation overrides for everything
+- [ ] More anchor links and permalinks
+- [ ] Scale object images so screen doesn't get too wide
+- [ ] Store actor text colors for using in scripts?
+- [ ] Do something with text audio cue control codes
+- [ ] Test with more than one game to ensure I'm not breaking shit
 
 ## Original README
 
