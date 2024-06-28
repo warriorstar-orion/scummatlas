@@ -93,9 +93,9 @@ func main() {
 		fs := http.FileServer(http.Dir(outputdir))
 		http.Handle("/", fs)
 
-		fmt.Printf("Web server started at http://127.0.0.1:3000/")
-		fmt.Printf("Access this URL in your browser to view the generated output.")
-		fmt.Printf("Press Ctrl-C to stop the web server.")
+		fmt.Println("Web server started at http://127.0.0.1:3000/")
+		fmt.Println("Access this URL in your browser to view the generated output.")
+		fmt.Println("Press Ctrl-C to stop the web server.")
 		err := http.ListenAndServe(":3000", nil)
 		if err != nil {
 			log.Fatal(err)
