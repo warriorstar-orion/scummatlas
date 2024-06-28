@@ -116,10 +116,6 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		return
 	}
 
-	getVar := func(val int) Var {
-		return Var{val}
-	}
-
 	getWord := func() int {
 		return getByteWord(true)
 	}
@@ -134,6 +130,17 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		return list
 	}
 
+	getVar := func() Var {
+		v := NewVar(getWord())
+		if v.val&0x2000 > 0 {
+			more := getWord()
+			if more&0x2000 > 0 {
+				return NewVar(v.val-0x2000, Var{more - 0x2000, nil})
+			}
+		}
+		return v
+	}
+
 	switch opcodeName {
 	case "isGreaterEqual",
 		"isLess",
@@ -141,7 +148,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		"isNotEqual",
 		"isGreater",
 		"lessOrEqual":
-		variable := getVar(getWord())
+		variable := getVar()
 		value := getWord()
 		target := getWord() + opCodeLength + p.offset
 
@@ -158,7 +165,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		}
 	case "notEqualZero",
 		"equalZero":
-		variable := getVar(getWord())
+		variable := getVar()
 		target := getWord()
 		target += p.offset + opCodeLength
 
@@ -220,7 +227,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 			op.addNamedParam("resId", getByte())
 		}
 	case "getObjectState", "getObjectOwner":
-		op.addResult(getVar(getWord()).String())
+		op.addResult(getVar().String())
 		op.addNamedParam("object", getWord())
 	case "panCameraTo":
 		op.addNamedParam("x", getWord())
@@ -258,7 +265,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		}
 		opCodeLength++
 	case "getRandomNumber":
-		op.callResult = getVar(getWord()).String()
+		op.callResult = getVar().String()
 		op.addParam(fmt.Sprintf("%d", getByte()))
 	case "jumpRelative":
 		op.callMethod = "goto"
@@ -275,17 +282,9 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 			op.addNamedParam("objB", getWord())
 		}
 	case "move":
-		opCodeLength = 5
 		op.opType = OpAssignment
-		word := p.getWord(1)
-		result := getVar(word)
-		// ???? from scummvm
-		if word&0x2000 > 0 {
-			opCodeLength += 2
-		}
-		op.assignDst = result.String()
-		value := p.getWord(3)
-		op.assignVal = fmt.Sprintf("%d", value)
+		op.assignDst = getVar().String()
+		op.assignVal = fmt.Sprintf("%d", getWord())
 	case "loadRoomWithEgo":
 		op.addNamedParam("object", getWord())
 		op.addNamedParam("room", getByte())
@@ -309,7 +308,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 			op.addNamedParam("index", getByte())
 			op.addNamedStringParam("char", fmt.Sprintf("%x", getByte()))
 		case 0x04:
-			op.assignDst = getVar(getWord()).String()
+			op.assignDst = getVar().String()
 			op.addNamedParam("stringId", getByte())
 			op.addNamedParam("index", getByte())
 		case 0x05:
@@ -437,7 +436,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 			symbol = "-"
 		}
 
-		result := getVar(getWord())
+		result := getVar()
 		op.assignDst = result.String()
 		op.assignVal = fmt.Sprintf("%v %v %v", result, symbol, getWord())
 	case "drawBox":
@@ -457,7 +456,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		if opcodeName == "increment" {
 			operation = "+"
 		}
-		variable := getVar(getWord())
+		variable := getVar()
 
 		op.assignDst = variable.String()
 		op.assignVal = fmt.Sprintf("%v %v 1", variable, operation)
@@ -470,7 +469,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		opCodeLength = opCodeLength + length + 1
 		op.addNamedStringParam("text", name)
 	case "expression":
-		op.addResult(getVar(getWord()).String())
+		op.addResult(getVar().String())
 		stackBottom := ""
 		stackTop := ""
 		for p.data[p.offset+int(opCodeLength)] != 0xff {
@@ -552,7 +551,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 	case "ifNotState":
 		opCodeLength = 6
 	case "getInventoryCount":
-		op.addResult(getVar(getWord()).String())
+		op.addResult(getVar().String())
 		op.addNamedParam("actor", getWord())
 	case "setCameraAt":
 		op.addNamedParam("x", getWord())
@@ -572,17 +571,17 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 	case "delayVariable":
 		opCodeLength = 3
 	case "and":
-		variable := getVar(getWord())
+		variable := getVar()
 		value := getWord()
 		op.opType = OpAssignment
 		op.assignDst = variable.String()
 		op.assignVal = fmt.Sprintf("%v && %x", variable, value)
 	case "getDist":
-		op.addResult(getVar(getWord()).String())
+		op.addResult(getVar().String())
 		op.addNamedParam("objectA", getWord())
 		op.addNamedParam("objectB", getWord())
 	case "findObject":
-		op.addResult(getVar(getWord()).String())
+		op.addResult(getVar().String())
 		op.addNamedParam("x", getWord())
 		op.addNamedParam("y", getWord())
 	case "startObject":
@@ -598,14 +597,14 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 	case "stopSound":
 		op.addNamedParam("sound", getByte())
 	case "getActorWalkBox":
-		variable := getVar(getWord())
-		actor := getVar(getWord())
+		variable := getVar()
+		actor := getVar()
 		op.addResult(variable.String())
 		op.addNamedStringParam("actor", actor.String())
 	case "getActorScale", "getActorMoving", "getActorFacing", "getActorElevation",
 		"getActorWidth", "getActorCostume", "getActorX", "getActorY":
-		op.callResult = getVar(getWord()).String()
-		op.addNamedStringParam("actor", getVar(getWord()).String())
+		op.callResult = getVar().String()
+		op.addNamedStringParam("actor", getVar().String())
 	case "ifClassOfIs":
 		op.opType = OpConditional
 		op.condOp1 = fmt.Sprintf("classOf(%d)", getWord())
@@ -620,7 +619,7 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		op.addNamedParam("walkee", getByteWord(paramWord2))
 		op.addNamedParam("distance", getByte())
 	case "walkActorTo":
-		op.addNamedStringParam("actor", getVar(getByteWord(paramWord1)).String())
+		op.addNamedStringParam("actor", fmt.Sprintf("%v", getByteWord(paramWord1)))
 		op.addNamedParam("x", getWord())
 		op.addNamedParam("y", getWord())
 	case "verbOps":
@@ -672,11 +671,11 @@ func (p *ScriptParser) parseNext() (op Operation, err error) {
 		op.addNamedParam("actor", getByte())
 		op.addNamedParam("object", getWord())
 	case "actorFromPos":
-		op.addResult(getVar(getWord()).String())
+		op.addResult(getVar().String())
 		op.addNamedParam("x", getWord())
 		op.addNamedParam("y", getWord())
 	case "findInventory":
-		op.callResult = getVar(getWord()).String()
+		op.callResult = getVar().String()
 		op.addNamedParam("owner", getByte())
 		op.addNamedParam("index", getByte())
 		opCodeLength += 2 // ?
